@@ -1,0 +1,13 @@
+title: gulpを使ってみよう
+==========
+date: 2015-10-25 17:45
+tags: []
+categories: []
+- - -
+
+```javascript
+var gulp = require('gulp');
+
+gulp.task('default');
+```
+使ってないじゃん1!!!
