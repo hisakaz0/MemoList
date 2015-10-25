@@ -19,4 +19,4 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('default', ['push', 'watch']);
+gulp.task('default', ['watch']);
