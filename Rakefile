@@ -18,6 +18,7 @@ task :push do
   system "git commit -m '#{msg}'"
   puts 'Pushing to remote'.green
   system 'git push origin master'
+  puts 'End task'.green
 end
 
 desc 'Fetch changes from remote.'
