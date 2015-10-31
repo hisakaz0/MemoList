@@ -1,0 +1,36 @@
+title: rbenv
+==========
+date: 2015-11-01 00:14
+tags: []
+categories: []
+- - -
+
+### ruby install
+
+__ruby install by rbenv__
+```bash
+rbenv install -l # installable ruby version list
+rbenv install <ruby-version> # Errors occured, then install rack libs
+rbenv global <ruby-version>
+rbenv version
+rbenv which ruby | ruby -v
+```
+
+__2.2.0__
+```bash
+sudo apt-get install libffi-dev
+rbenv install 2.2.0
+```
+- [Ruby 2.2.0をrbenvとruby-buildでインストール - Qiita](http://qiita.com/baboocon/items/fb81946fc088b18d6a3a)
+- [Rails開発環境の構築（rbenvでRuby導入からBundler、Rails導入まで）（Macport編） - Qiita](http://qiita.com/emadurandal/items/a60886152a4c99ce1017)
+
+
+### gems install
+
+gemはおくそくだけど、rubyをinstallした際にそのばーじょんに応じたgemがinstallされてるっぽい
+なので、手動で入れないとダメなのはbundleだけかも
+```bash
+rbenv versions
+rbenv exec gem install bundle # rubyのばーじょんに応じたbundlerをinstall
+rbenv which bundle
+```

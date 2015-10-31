@@ -1,0 +1,38 @@
+title: jquery
+==========
+date: 2015-11-01 00:25
+tags: []
+categories: []
+- - -
+
+
+### Require Document Ready!!!
+至極当然,当たり前だのクラッカ.
+
+viewのjsをassets以下に移すとき, document.readyを書き忘れていたせいで動かなかったバグ.
+書き始めに
+```javascript
+$(document).ready( function () {
+...
+```
+って書いてあげましょう.じゃないと,動きません.
+
+### focus input field
+
+- [window.onloadとjQueryの$(document).ready等の比較](http://rcmdnk.github.io/blog/2015/07/11/computer-javascript-jquery/)
+`$(document).ready`はdomツリーが構築し終わった段階で呼び出されるらしい.
+そのため, 画像やその他データが読み終われる前に実行されるらしい.
+mdlのiput要素に対してdocument.ready内にfocus()を書くと,mdl.jsが原因?で
+focusは一旦当てられるが外される.
+これを回避するために,次のように書く.
+```javascript
+window.onload = function () {
+  $("#user_email").focus();
+}
+```
+jsとjqueryが混ぜってるけど,動くことは動く.
+
+### jquery show/hide method
+slideUpがあるが,あれはhideだけ.
+slideDownもあるが,あれはshowだけにしか使えない.
+

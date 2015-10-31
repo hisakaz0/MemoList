@@ -1,0 +1,234 @@
+title: rails
+==========
+date: 2015-11-01 00:07
+tags: []
+categories: []
+- - -
+
+
+## rails console
+### アセットパスの確認
+```bash
+rails c
+> puts Rails.configure.assets.paths 
+# だった気がする
+```
+
+## error tips
+__Cannot get array__
+まさかのsqlite3が入って(なくともrailsさんは動いてました)
+ただ、取ってきたつもりでいるので(dbいじるときに初めて気づくあれ
+```bash
+sudo apt-get install sqlite3
+```
+をしてあげましょう。
+
+## rails install
+### システムにgemを入れる場合
+skip bundleしないとgem cmd以下のやつがはいる.
+だから, bundle installで指定したものを入れる.
+```bash
+bundle exec rails new <app_name> --skip-bundle
+cd <app>
+vi Gemfile # use rubyracer
+bundle install
+```
+### アプリごとにgemを入れる場合
+
+```bash
+mkdir <app_name> && cd $_
+bundle init
+echo "gem 'rails'" >> Gemfile # railsをinstall
+bundle install --path vendor/bundle # vendor/bundle以下にgemをいれる
+bundle exec rails new . --skip-bundle # カレントディレクトリにrailsを入れる
+vi Gemfile
+bundle update # めんどごとがおこらない
+bundle install #　pathはvendor/bundleに一度設定されているから --pathはいらない
+echo '/vendor/bundle' >> .gitignore # gemsはgitで管理しない　だってGemfile(.lock)があるじゃない
+```
+[Ruby on Rails開発環境を構築する(Homebrew, rbenv, Bundler) | mawatari.jp](http://mawatari.jp/archives/build-a-development-environment-of-rails-to-mac)
+
+### Rails Flash Msg
+
+- [Rails4でユーザーに簡易なメッセージをflashで表示する - Rails Webook](http://ruby-rails.hatenadiary.com/entry/20141127/1417086075)
+
+    ```ruby
+    # controller
+    redirect_to you_want_to_path, notice: 'Coca Cola is soooo good'
+    # view
+    <%= notice %>
+    ```
+    で使える.
+
+    ### Error Page
+
+- [Railsの404,500エラーページをカスタマイズ - Qiita](http://qiita.com/mr-myself/items/c2f4fb2e5dcee6a336f3)
+- [Railsの404/500エラーページ、簡単作成手順 - 酒と泪とRubyとRailsと](http://morizyun.github.io/blog/custom-error-404-500-page/)
+- [Railsで404/500エラーの処理 - Qiita](http://qiita.com/dalataro/items/fb1ea251197003deec12)
+- [Railsでの404、500、その他エラーへのベストプラクティスについてまとめてみる。 - Qiita](http://qiita.com/yukihariguchi/items/5fe4e99f45b3207c7ed9)
+- [Railsでのログ/ロガーまとめ（ログ出力、ログレベル、ロガー作成、ログフォーマット） - Rails Webook](http://ruby-rails.hatenadiary.com/entry/20150110/1420863998)
+
+
+    if development mode is,  display error page
+    __config/environments/development.rb__
+    ```bash
+    config.consider_all_requests_local = false
+    ```
+
+    if not routtings, go 404 page
+    __config/routes.rb__
+    ```ruby
+    get "*path", controller: 'application', action: 'render_404'
+    ```
+
+    edit __app/controllers/application_coroller.rb__ to set redirect
+    if internal server error and nothing resource error occur
+    ```ruby
+    rescue_from ActiveRecord::RecordNotFount, with: render_404
+    rescue_from ActionController::RoutingError, with: render_404
+    rescue_from Exception, with: render_500
+
+    # exception = nilはexceptionがなかった場合にはnilに設定するよ?だった気がする
+    def render_404( exception = nil )
+    if exception
+    # loggerはﾛｸﾞﾌｧｲﾙに吐き出すやつらしい
+    logger.info "Rendering 404 with exception: #{exception.message}"
+    end
+    render template: 'errors/404', status: 404, layout: 'no_header'
+    end
+
+    def render_500( exception = nil )
+    if exception
+    logger.info "Rendering 500 with exception: #{exception.message}"
+    end
+    render template: 'errors/500', status: 500, layout: 'no_header'
+    end
+    ```
+
+    あとはｴﾗｰﾍﾟｰｼﾞを作るなどの作業をしてもらえらば十分です(大鳳?).
+
+    > タウイタウイのみんなもがんばってるかしら?
+
+    ### Find out Using gems
+
+    ```bash
+    gem environment
+    ```
+- [Rubyが参照してるgemのパスやインストール済gemを確認する方法 - Qiita](http://qiita.com/h5y1m141@github/items/74029cab9706971c8dbe)
+
+### Unload unless use object
+railsのcontrollerでdbからrecordを引っ張ってくるとする.
+テストで動かしていたため, 中身をrenderしていなかった.
+こんな場合, railsさんは賢いから!!!!使わないobjectなんてloadしない!!というおせっかい仕様.
+
+```ruby
+p @record.blank?
+```
+でもいいので, 書いておくと引っ張ってきてくれます.
+
+
+### Back button on rails
+
+```ruby
+link_to "back to the future", :back
+```
+
+### Enable Turbolinks
+
+- [Rails - Turbolinksをオフしないためにやった事 - Qiita](http://qiita.com/saboyutaka/items/bcc0966313c6f7399a6e)
+
+こうすることで, function以下のjsは発覚する.
+
+```javascript
+$(document).on('ready page:load', function () {});
+```
+
+### understand link_to
+
+ﾋﾞｷﾞﾅｰﾘﾝｸﾄｩｰ
+```ruby
+link_to "Sign up" user_registration_path, class: "mdl-button mdl-js-button"
+```
+
+ｲﾝﾀﾒﾃﾞｨｴｲﾄ
+```
+link_to user_registration_path do
+  button class="mdl-js-button mdl-button mdl-button--icon"
+    i class="material_icons" favorite /i
+  /button
+end
+```
+
+# catch no-image no-name
+
+- [Railsエンジニアならこれだけは知っておけっていう便利メソッド - (ﾟ∀ﾟ)o彡 sasata299's blog](http://blog.livedoor.jp/sasata299/archives/51718602.html)
+
+### display price
+
+- [number_to_currency - リファレンス - - Railsドキュメント](http://railsdoc.com/references/number_to_currency)
+- [Ruby - 整数に3桁区切りカンマを仕込む備忘録 - Qiita](http://qiita.com/Katsumata_RYO/items/1055c2f27cbd99e67fc2)
+
+railsでは`number_to_currency`がよさげ
+
+### rails image with Carrywave
+
+imageが空かどうかは
+```ruby
+if image.url == nil
+```
+で判定したらいい
+
+
+### rails file upload
+- [Material Design File Input](http://codepen.io/akhmed_gaziev/pen/JdVQQm)
+ｱｯﾌﾟﾛｰﾄﾞしたﾌｧｲﾙ名をﾃｷｽﾄｴﾘｱに表示.
+text_fieldはdisableにreadonly.
+
+- [jQuery – いろんなセレクタ指定方法＋αを覚えて、目的の要素をさくっと取得する | 1：n – DETELU Blog](http://www.detelu.com/blog/2011/11/jquery-selector-traversing/)
+jsでelement操作では`parent`とかnextとか便利なものがたくさん.
+
+__なんでもdoで開いてendで閉じる(あたりまえだ__
+- [Railsでlabelタグの中にimageタグを入れる - Qiita](http://qiita.com/knt45/items/0814d97530fef78e2c8b)
+落とし穴. rails っていうか doしたら開いてendで閉じる.それだけ.
+
+### partial render
+
+- [Railsの部分テンプレートからインスタンス変数を参照するのはやめよう。 | CreativeStyle](http://kadoppe.com/archives/2013/09/rails-partial-template-instance-variables.html)
+
+再利用性が高いコードする方法(ざっくり).
+2つ以上の変数も渡せる.
+非常に便利.
+```ruby
+# show.html.erb 呼び出す側
+render partial: 'header', locals: {user: @user, cards: @cards}
+# _header.html.erb 呼び出される側
+user.name
+```
+
+### 解決策 その一 -> turbolinksを一時的に無効化する
+
+data-no-turbolinks=1を付け加えると一時的に無効化される.
+今のところ一番の解決策.
+```html
+<a class="mdl-navigation__link" data-no-turbolinks='1' href="/welcome/index">Index</a>
+```
+
+## turbolinks
+こいつはダメだ...初心者にはあつえない...
+こいつがいると readyとかのeventが発火しないので悲しくなる
+(mdlが初期リロード時にしか動かない).
+
+- [Rails 4のturbolinksについて最低でも知っておきたい事 | KRAY Inc](http://kray.jp/blog/must-know-about-turbolinks/)
+- [Rails4 - material design lite と turbolinks - Qiita](http://qiita.com/imatomi/items/2a59f74a88b8e7545c7b)
+
+### create fake data and insert db on rails
+
+ffakerというfakerを高速化したgem.
+fakerは偽のデータを作るのにすごい便利.
+使い方はfakerを見るといい.
+
+### sqlのconsoleを開く
+
+```bash
+rails dbconsole
+```

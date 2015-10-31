@@ -1,0 +1,293 @@
+title: polymer
+==========
+date: 2015-11-01 00:07
+tags: []
+categories: []
+- - -
+
+### polymer
+__install__
+```bash
+vi Gemfile
+gem 'polymer-rails'
+gem 'polymer-core-rails'
+gem 'polymer-paper-rails'
+gem 'sprockets', '< 3.0.0' # polymerは2.xを使う
+bundle update
+```
+
+__how to use__
+install polyer on rails
+```bash
+rails g polymer:install
+```
+独自のcomponentを使いたければ
+```bash
+rails g polymer:component <component-name> # -は必要らしい
+```
+とたいぽしてcomponentをカスタムしましょう。
+また、Polymerで用意されている要素はマニフェストファイル
+`app/assets/components/application.html.erb`
+に書き加えましょう。`paper-button`を使用したい場合は
+```erb
+//= require paper-button/paper-button
+```
+と冗長っぽく書く。
+
+- [ruby - Rails NameError (uninitialized constant Sprockets::Processor) with `rails-polymer` during `rake rails:update:bin` - Stack Overflow](http://stackoverflow.com/questions/30017174/rails-nameerror-uninitialized-constant-sprocketsprocessor-with-rails-polyme)
+- [Releases · alchapone/polymer-rails](https://github.com/alchapone/polymer-rails/releases)
+- [Ruby on RailsでPolymerを使う - Qiita](http://qiita.com/mizukmb/items/051eb8bf03758d66a2ca)
+
+### polymer with bower-rails
+
+__bower-rails initialization__
+bower-railsで設定ファイルを一から書くより
+bowerで一度設定ファイルを作り、そのdependencyをコピペしたほうが正確かも
+
+bowerコマンドでrailsで使うパッケージの詳細を得る
+```bash
+mkdir bower-tmp && cd $_
+bower init
+bower install --save <packages> # --saveがないとbower.jsonにinstallした履歴が残らない
+```
+
+上のbower.jsonに記述されているdependenciesのところをverndorかlibに貼り付ける。
+```bash
+rails g bower_rails:initialize json
+vi bower.json
+rake bower:install
+```
+
+__use polymer-elements__
+google / using Elementsとrailsを融合
+```bash
+vi app/view/layout/application.html.erb ## following add
+<script src="/assets/webcomponentsjs/webcomponents-lite.min.js"></script>
+<link rel="import" href="/assets/paper-button/paper-button.html">
+```
+
+- [Railsで外部JavaScriptライブラリなどのAssetを管理するなら、bower-railsが便利 | mah365](http://blog.mah-lab.com/2014/04/14/bower-rails/)
+- [Using Elements - Polymer Element Catalog](https://elements.polymer-project.org/guides/using-elements#introduction)
+- [rharriso/bower-rails](https://github.com/rharriso/bower-rails/)
+- [Rails4ではbackground:url("assets/hoge.png")の書き方は動かない話 - Qiita](http://qiita.com/wadako111/items/03bc00d914e62243a511)
+
+### Create polymer application
+
+__v.5.0__
+- [Creating a Polymer Chat App with Material Design - PubNub](http://www.pubnub.com/blog/creating-a-polymer-chat-app-with-material-design/)
+
+__v.1.0のやつ__
+- [PolymerElements/app-layout-templates](https://github.com/PolymerElements/app-layout-templates)
+
+custom elementsは`app/assets/components/<controller>/`に保存しよう
+
+
+
+```bash
+ruby -v # 2.2.x
+rails -v # 4.2.x
+
+
+rails new <app_ name> --skip-bundle
+vi Gemfile
+gem 'bower-rails'
+bundle install
+
+
+rails g bower_rails:initialize json
+vi bower.json # verndor/dependencies以下に
+"polymer": "Polymer/polymer#^1.0.0",
+"iron-elements": "PolymerElements/iron-elements#~1.0.3", # core
+"neon-elements": "PolymerElements/neon-elements#~1.0.0", # animation, effect
+"paper-elements": "PolymerElements/paper-elements#~1.0.5",  # material design
+"platinum-elements": "PolymerElements/platinum-elements#~1.1.1" # offline
+rake bower:install
+
+
+vi config/application.rb # class Application内に
+# bower-railsで管理するpolymer components
+config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+# custom elements
+config.assets.paths << Rails.root.join('app', 'assets', 'components')
+
+
+vi app/view/layouts/application.html.erb # head内に
+<script src="/assets/webcomponentsjs/webcomponents.min.js"></script>
+# 使うelementを追加するたびに
+<link rel="import" href="/assets/element-name/element-name.html">
+```
+
+
+### polymerのぱぴぷぺぽ
+
+変数が他と混じらないようにするため作られているのかな?
+
+```html
+
+<!-- custome elementを使う -->
+<user-view first-name="Samuel" last-name="Adams"><user-view>
+<!-- custome elementの定義  -->
+<dom-module is="user-view"> <!-- x-appは custom element name, ハイフンは必要 -->
+<template> <!--  # よくわからんが絶対いる -->
+<!--  ここからいつもどおり -->
+<span>{{firstName}}</span>  <!-- カーリーブランケットの両端は空白入れちゃダメ -->
+<span>{{lastName}}</span>
+</template>
+
+<script> <!-- custom elementに関する記述、いろいろ書ける -->
+Polymer({
+is: 'user-view' # custom elementsの名前
+properties: {
+firstName: String,
+lastName: String
+}
+});
+</script>
+</dom-module>
+```
+
+
+### polymer data-bindings
+
+curly brancketとはかもめカッコ、
+square brancketは中括弧
+
+- Two-way binding(双方向通信)
++ curly branckets( in host )
++ notify: true( in child )
+- One-way binding from child to host
++ curly branckets
++ notify: true
++ readOnly: true
+- One-way binding from host to child
++ sequare branckets
++ notify: true
+
+### material design input validation
+
+mdlはﾃﾞﾌｫﾙﾄでvalidationを行ってくれる.
+まぁ, 満足行くものではないが....
+patternｵﾌﾟｼｮﾝをつけることでvalidationが行われる.
+足りない部分はbuttonを押せない状態するなど, 頑張ってください.
+
+- [4.10 Forms — HTML5](http://www.w3.org/TR/html5/forms.html#has-a-periodic-domain)
+- [Material Design Lite](http://www.getmdl.io/components/index.html#textfields-section)
+- [HTML input pattern Attribute](http://www.w3schools.com/tags/att_input_pattern.asp)
+
+### polymer memory
+
+element(jsで)`factoryImpl`が実行される
+
+```javascript
+MyElement = Polymer({
+  is: 'my-element', // be動詞のis?
+  factoryImpl: function( cost, name ){
+    this.cost = cost;
+    this.computeFullName( name );
+  },
+  computeFullName: function( name ) {
+    var display_name = "kusa " + name + " aieeeeeeee!?!?!?!?!?";
+  }
+});
+
+var el = new MyElement( 320, 'kazu' );
+```
+
+`factoryImpl`は`document.createElement`を使うと実行されないから(しぶりん).
+
+railsで使うときは, card-element(使うエレメント)を読み込んでおいて,
+js.erbを呼び出して,そのときに値を代入したほうが綺麗になりそう.
+
+
+---
+`extends`を使えばinheritできりゅー!
+
+現在, native html elementに対してのみ'extends'が使える.
+もしかしたら使うかもね.
+
+```javascript
+MyInput = Polymer({
+  is: 'my-input',
+  extends: 'input',
+  created: function() {
+    this.style.border = '1px solid red';
+  }
+});
+```
+
+使うときはisをつける.
+```html
+<input is="my-input">
+```
+
+### polymer starter kit
+
+- [PolymerElements/polymer-starter-kit](https://github.com/PolymerElements/polymer-starter-kit)
+
+polymer-starter-kitには2つある.
+beginnersとintermediateである.
+
+まずはbeginnersから.
+
+```bash
+wget https://github.com/PolymerElements/polymer-starter-kit/releases/download/v1.1.0/polymer-starter-kit-1.1.0.zip
+mkdir polymer-starter-kit-light-1.1.0
+unzip polymer-starter-kit-light-1.1.0.zip -d polymer-starter-kit-light-1.1.0
+cd polymer-starter-kit-light-1.1.0
+python -m SimpleHTTPServer 8080 # for **nux/max
+```
+
+pip(pythonのpackage manager)やunzipが入っていない場合はインストールしよう.
+
+- [End to End with Polymer (The Polymer Summit 2015) - YouTube](https://www.youtube.com/watch?v=1f_Tj_JnStA)
+-
+
+
+### imports elements
+
+
+__app/layouts/application.html.erb__
+```html
+<%= render 'layouts/shared/import_elements' %>
+```
+__app/layouts/shared/_import_elements.html__
+```html
+<!-- paper elements -->
+<link rel="import" href="/assets/paper-button/paper-button.html">
+<link rel="import" href="/assets/paper-card/paper-card.html">
+<link rel="import" href="/assets/paper-chexbox/paper-chexbox.html">
+<link rel="import" href="/assets/paper-dialog/paper-dialog.html">
+<link rel="import" href="/assets/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="/assets/paper-fab/paper-fab.html">
+<link rel="import" href="/assets/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="/assets/paper-icon-buton/paper-icon-button.html">
+<link rel="import" href="/assets/paper-input/paper-input.html">
+<link rel="import" href="/assets/paper-item/paper-item.html">
+<link rel="import" href="/assets/paper-material/paper-material.html">
+<link rel="import" href="/assets/paper-menu/paper-menu.html">
+<link rel="import" href="/assets/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="/assets/paper-tabs/paper-tabs.html">
+<link rel="import" href="/assets/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="/assets/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="/assets/paper-tooltip/paper-tooltip.html">
+
+<!-- iron elements -->
+<link rel="import" href="/assets/iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="/assets/iron-ajax/iron-ajax.html">
+<link rel="import" href="/assets/iron-behaviors/iron-behaviors.html">
+<link rel="import" href="/assets/iron-component-page/iron-component-page.html">
+<link rel="import" href="/assets/iron-fit-behavior/iron-fit-behavior.html">
+<link rel="import" href="/assets/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/assets/iron-form/iron-form.html">
+<link rel="import" href="/assets/iron-icon/iron-icon.html">
+<link rel="import" href="/assets/iron-icons/iron-icons.html">
+<link rel="import" href="/assets/iron-image/iron-image.html">
+<link rel="import" href="/assets/iron-input/iron-input.html">
+<link rel="import" href="/assets/iron-pages/iron-pages.html">
+<link rel="import" href="/assets/iron-range-behavior/iron-range-behavior.html">
+<link rel="import" href="/assets/iron-selector/iron-selector.html">
+<link rel="import" href="/assets/iron-validatable-hahavior/iron-validatable-hahavior.html">
+<link rel="import" href="/assets/iron-validator-behavior/iron-validator-behavior.html">
+```
+
+

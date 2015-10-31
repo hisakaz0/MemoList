@@ -1,0 +1,28 @@
+title: rails db
+==========
+date: 2015-11-01 00:07
+tags: []
+categories: []
+- - -
+
+## dbを作る
+```bash
+rake db:create
+```
+
+## テーブルを作る
+```bash
+rake db:migrate
+```
+migrateファイルはdbにテーブルを作るための原本みたいなもの
+
+## enter db
+the way to enter natual database( rails default databse is sqlite3)
+```bash
+rails db
+```
+
+## 間違ったからdb削除する
+```bash
+aake db:drop
+```

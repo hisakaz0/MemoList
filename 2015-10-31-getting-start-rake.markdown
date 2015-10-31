@@ -15,6 +15,9 @@ bundle install
 # install gems
 ```
 
+### いいジャム
+- colorize
+
 ## Rakefile
 ```ruby
 desc 'タスクの説明'
@@ -45,5 +48,8 @@ task :name do
 end
 ```
 
-
+- [Ruby - rakeタスク内で別のタスクを呼び出す - Qiita](http://qiita.com/paty-fakename/items/5df189681c92ce1e8004) 
+- [ファイルを扱う作業をRakeで便利にしよう！（パート2：実践編1） - るびくる＆RBのRubyプログラミング大作戦！ - rubicle.net](http://rubicle.net/rubicle_talk_1-2.html)
+- [colors - Colorized Ruby output - Stack Overflow](http://stackoverflow.com/questions/1489183/colorized-ruby-output)
+- [Ruby - Rakeのshで外部コマンドを実行する - Qiita](http://qiita.com/vzvu3k6k/items/7e6e5520eeb829ec1c8b)
 
