@@ -1,0 +1,31 @@
+title: markdown
+==========
+date: 2015-11-01 10:22
+tags: []
+categories: []
+- - -
+
+- [joker1007/vim-markdown-quote-syntax](https://github.com/joker1007/vim-markdown-quote-syntax)
+
+気づかなかったけど,bashのhighlightは標準でない.
+だから, 定義してあげる.
+
+```vim
+let g:markdown_quote_syntax_filetypes = {
+        \ "coffee" : {
+        \   "start" : "coffee",
+        \},
+        \ "css" : {
+        \   "start" : "\\%(css\\|scss\\)",
+        \},
+        \ "mustache" : {
+        \   "start" : "mustache",
+        \},
+        \ "haml" : {
+        \   "start" : "haml",
+        \},
+  \}
+```
+
+上のやつが上手に動かないので,
+フェンスコードブロックはbashではなくてshで書いたほうがよい.

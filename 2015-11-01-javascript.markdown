@@ -24,7 +24,7 @@ html要素が存在しているかどうかを調べる方法.
 `.length`を使うといいらしいです.
 存在してる数が返り値.
 
-```js
+```javascript
 if ( $('selector').length > 0 ){
   console.log( 'selector is exist!' );
 }

@@ -1,0 +1,22 @@
+title: vim tips
+==========
+date: 2015-11-01 01:13
+tags: []
+categories: []
+- - -
+
+## vim help 
+### open full size help
+
+```vim
+:help | only
+```
+
+### controlle
+操作
+- 戻る: Ctrl-O(Ctrl-T
+- 進む: Ctrl-]
+
+### vim option
+`:help option-list`
+

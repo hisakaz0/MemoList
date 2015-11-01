@@ -9,8 +9,7 @@ categories: []
 
 - [リモートのgitブランチをローカルにチェックアウトする - sessanの日記](http://sessan.hatenablog.com/entry/2012/11/04/132746)
 
-
-```bash
+```sh
 git checkout -b local_new_branch remote/exited_branch
 ```
 
@@ -22,7 +21,7 @@ git checkout -b local_new_branch remote/exited_branch
 2. anaにcheckoutします.
 3. mergeします.
 
-```bash
+```sh
 # check desired commit hash(ここでいう sao)
 git checkout sao_branch
 git log
@@ -34,7 +33,7 @@ git merge sao # ｱｯｱｱｱｱ------------!!!!
 
 ### Delete Branch(local and remote)
 
-```bash
+```sh
 git b
 * webapp
   frontend  
@@ -52,14 +51,14 @@ git push --delete origin :frontend
 
 - [gitで特定ファイルを特定のcommitに戻す - Qiita](http://qiita.com/ritukiii/items/5bc8f74dbf4dc5d1384c)
 
-```bash
+```sh
 git ch <commit_hash> <file_path>
 ```
 
 ### Checkout a file to HEAD
 一つだけ戻したい時
 
-```bash
+```sh
 git ch -- <file_path>
 ```
 
@@ -68,7 +67,7 @@ git ch -- <file_path>
 - [Gitでやらかした時に使える19個の奥義 - Qiita](http://qiita.com/muran001/items/dea2bbbaea1260098051)
 
 コメント間違った時に
-```bash
+```sh
 git commit --amend
 ```
 
@@ -83,7 +82,7 @@ localのcommit-を元に戻す
 commitだけをなくす(addしたことは残す)場合は`--soft`.
 変更すらも消す場合は`--hard`を使う.
 
-```bash
+```sh
 # HEADに戻す
 git reset --soft HEAD^
 # あるコミットに戻す
@@ -91,7 +90,7 @@ git reset --soft <commit_hash>
 ```
 
 ローカルに反映された結果をremoteに持ち上げよう
-```bash
+```sh
 git push -f origin <romote_branch>
 ```
 
@@ -99,6 +98,3 @@ git push -f origin <romote_branch>
 - [ git reset (--hard/--soft)ワーキングツリー、インデックス、HEADを使いこなす方法 - Qiita](http://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe)
 - [git commitをやり直しする＆取り消しする(「get commit --amend」と「git reset」) - hogehoge foobar Blog Style5](http://d.hatena.ne.jp/mrgoofy33/20100910/1284069468)
 
-
-
--
