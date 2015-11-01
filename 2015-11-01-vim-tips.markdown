@@ -20,3 +20,10 @@ categories: []
 ### vim option
 `:help option-list`
 
+
+## vimのpluginたち
+
+- [Vim pluginへの入門[NeoBundle.vim] - Qiita](http://qiita.com/himinato/items/caf5a0b19ce893a75363)
+- [脱初心者を目指すVimmerにオススメしたいVimプラグインや.vimrcの設定 - Qiita](http://qiita.com/jnchito/items/5141b3b01bced9f7f48f)
+- [NeoBundleによるVimプラグイン管理とおすすめプラグイン - Catcher in the tech](http://catcher-in-the-tech.net/1063/)
+- 
