@@ -1,4 +1,4 @@
-title: git 
+title: git
 ==========
 date: 2015-11-01 00:41
 tags: []
@@ -36,7 +36,7 @@ git merge sao # ｱｯｱｱｱｱ------------!!!!
 ```sh
 git b
 * webapp
-  frontend  
+  frontend
   master
 git branch -d frontend # delete local branch "frontend"
 # this following is for all versions

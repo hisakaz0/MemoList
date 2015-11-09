@@ -1,0 +1,42 @@
+title: favicon
+==========
+date: 2015-11-09 16:12
+tags: []
+categories: []
+- - -
+
+## faviconをつくるｽｸﾘﾌﾟﾄ
+
+いつも思うのだが
+```sh
+convert original.png -define icon:auto-resize favicon.ico
+```
+がうまくうごかない.
+その度にこれを書いてる気がする...
+
+
+### 画像ﾌｧｲﾙを突っ込んでfavicon.icoで吐き出す.
+
+
+```sh
+#!/bin/bash
+
+if [ ! -f $1 ]; then
+  echo "usage: $0 <image_file>"
+  exit 1
+fi
+
+size=('256' '192' '128' '96' '64' '48' '40' '32' '24' '16')
+images=''
+
+for (( i=0; i<${#size[@]}; ++i )) do
+  convert $1 -resize ${size[$i]} favicon_${size[$i]}.png
+  images="${images}favicon_${size[$i]}.png "
+done
+
+convert ${images} favicon.ico
+```
+
+- [if 文と test コマンド - UNIX & Linux コマンド・シェルスクリプト リファレンス](http://shellscript.sunone.me/if_and_test.html)
+- [ImageMagickでマルチアイコンを簡単に作る | Regen Techlog](http://www.regentechlog.com/2014/04/03/imagemagick-multisize-ico/)
+- [favicon_link_tag - リファレンス - - Railsドキュメント](http://railsdoc.com/references/favicon_link_tag)
