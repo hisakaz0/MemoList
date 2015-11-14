@@ -1,0 +1,76 @@
+title: kancolle
+==========
+date: 2015-11-15 00:15
+tags: []
+categories: []
+- - -
+
+
+## 送られてくるデータ
+
+管理に必要なデータはtext/plainで送られてくる.
+
+中身はこんなふう.
+```sh
+svdata={json}
+```
+
+### データの種類
+
+#### 鎮守府内
+- powerup: 強化したあと
+- port: 提督室にアクセスした
+- questlist: クエストページを見た/ ページを捲った
+- ndock: 入渠にアクセスした
+- charge: 補給した
+- mission: 遠征にアクセスした
+- deck: 遠征を出した
+- change: 編成を入れ替えた
+- slotset: 装備を入れ替えた
+- preset_deck: 編成にアクセスした
+- preset_register: 編成にを記録
+- preset_select: 編成を展開
+- preset_delete: 編成記録を削除
+- mapinfo: 出撃クリック
+- destroyship: 艦むすを解体した
+- destroyitem2: 装備を廃棄
+- createitem: 開発
+- kdock: 建造ドックの情報
+- payitem: 購入したアイテム情報
+- buy: 家具を購入した時
+- itemuse: アイテムを使った
+- record: 艦隊司令部情報
+- getlist: ランキング
+- picture_book: 図鑑にアクセスした
+- practice: 演習一覧
+- clearitemget: 任務達成時に得られるアイテム
+- remodel_slotlist: 改修できる装備リスト
+
+
+#### 出撃中
+- mapcell: マップセルの情報
+- battle: 戦闘の様子(not 結果)
+- battleresult: 戦果報告
+- ship_deck: 艦隊の状態(疲労度)
+- next: 次のマップセルの情報?
+- unsetslot:
+- useitem: 消費した資源
+-
+#### 不明
+
+- slot_item: 出撃から帰還した
+- basic: アイテムを使った
+- material: 艦むすを建造した/アイテムを使った/任務をクリア
+- ship3: 艦むすデータ
+- start: 出撃/遠征/入渠/任務を開始
+- stop: 任務を解除
+
+
+## unicodeを漢字に変換
+unicodeでエンコードされたデータは`unescape()`を使うといい.
+
+```javascript
+res = unescape("\u6210\u529f")
+// "成功"
+```
+
