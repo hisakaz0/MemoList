@@ -45,6 +45,7 @@ svdata={json}
 - practice: 演習一覧
 - clearitemget: 任務達成時に得られるアイテム
 - remodel_slotlist: 改修できる装備リスト
+- get_practice_enemyinfo: 演習相手の艦隊情報
 
 
 #### 出撃中
