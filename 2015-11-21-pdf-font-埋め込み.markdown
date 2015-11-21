@@ -1,0 +1,103 @@
+title: pdf font 埋め込み
+==========
+date: 2015-11-21 11:00
+tags: [tex latex fonts pdf xpdf]
+categories: []
+- - -
+
+## 結論
+フォント埋め込みはできたっぽいが,hiraginoは埋め込まれてない.
+
+### とりあえずref
+
+- [Xpdf.app | マスクメロン](http://www.muskmelon.jp/?page_id=86)
+- [Xpdf - TeX Wiki](https://oku.edu.mie-u.ac.jp/~okumura/texwiki/?Xpdf#inst-mac)
+- [OTF - TeX Wiki](http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?OTF)
+- [Mac の TeX Live でヒラギノ・小塚・IPA フォントを埋め込む - KainokiKaede's diary](http://kainokikaede.hatenablog.com/entry/2012/06/08/015241)
+- [TeXShop + MacTeX / UpTeX でのヒラギノ フォントの埋め込み](http://osksn2.hep.sci.osaka-u.ac.jp/~taku/osx/embed_hiragino.html)
+
+## やったこと
+### フォント埋め込み
+手順書通り.
+
+```sh
+sudo mkdir -p /usr/local/texlive/texmf-local/fonts/opentype/public/hiragino/
+cd /usr/local/texlive/texmf-local/fonts/opentype/public/hiragino/
+
+sudo ln -s "/Library/Fonts/ヒラギノ明朝 Pro W3.otf" HiraMinPro-W3.otf
+sudo ln -s "/Library/Fonts/ヒラギノ明朝 Pro W6.otf" HiraMinPro-W6.otf
+sudo ln -s "/Library/Fonts/ヒラギノ角ゴ Pro W3.otf" HiraKakuPro-W3.otf
+sudo ln -s "/Library/Fonts/ヒラギノ角ゴ Pro W6.otf" HiraKakuPro-W6.otf
+sudo ln -s "/Library/Fonts/ヒラギノ角ゴ Std W8.otf" HiraKakuStd-W8.otf
+sudo ln -s "/Library/Fonts/ヒラギノ丸ゴ Pro W4.otf" HiraMaruPro-W4.otf
+sudo ln -s "/System/Library/Fonts/ヒラギノ明朝 ProN W3.otf" HiraMinProN-W3.otf
+sudo ln -s "/System/Library/Fonts/ヒラギノ明朝 ProN W6.otf" HiraMinProN-W6.otf
+sudo ln -s "/System/Library/Fonts/ヒラギノ角ゴ ProN W3.otf" HiraKakuProN-W3.otf
+sudo ln -s "/System/Library/Fonts/ヒラギノ角ゴ ProN W6.otf" HiraKakuProN-W6.otf
+sudo ln -s "/Library/Fonts/ヒラギノ角ゴ StdN W8.otf" HiraKakuStdN-W8.otf
+sudo ln -s "/Library/Fonts/ヒラギノ丸ゴ ProN W4.otf" HiraMaruProN-W4.otf
+
+sudo mktexlsr
+sudo updmap-sys --setoption kanjiEmbed hiragino
+kanji-config-updmap hiragino
+```
+
+実行の途中でエラーが出た.
+
+```sh
+hiragino not available, falling back to auto!
+```
+
+### フォント埋め込みの確認
+
+入力
+```sh
+pdffonts <pdf_file>
+```
+
+出力
+```sh
+hisakazu@quark:~/Study/seminar/s2_02/draft 〆 pdffonts draft.pdf
+name                                 type              emb sub uni object ID
+------------------------------------ ----------------- --- --- --- ---------
+GothicBBB-Medium-Identity-H          CID Type 0        no  no  no       5  0
+MEYWCV+CMBX9                         Type 1C           yes yes no       6  0
+KIUUKX+CMBX12                        Type 1C           yes yes no       7  0
+Ryumin-Light-Identity-H              CID Type 0        no  no  no       9  0
+KZMZWM+CMSY10                        Type 1C           yes yes no      10  0
+DELYED+CMR10                         Type 1C           yes yes no      11  0
+PYNYTZ+CMMI10                        Type 1C           yes yes no      19  0
+hisakazu@quark:~/Study/seminar/s2_02/draft 〆 dvipdfmx draft.dvi
+draft.dvi -> draft.pdf
+[1]
+147859 bytes written
+hisakazu@quark:~/Study/seminar/s2_02/draft 〆 pdffonts draft.pdf
+name                                 type              emb sub uni object ID
+------------------------------------ ----------------- --- --- --- ---------
+PUATUV+IPAexGothic                   CID TrueType      yes yes no       5  0
+IZFVPO+CMBX9                         Type 1C           yes yes no       6  0
+RHRJFT+CMBX12                        Type 1C           yes yes no       7  0
+IJIVTO+IPAexMincho                   CID TrueType      yes yes no       9  0
+SYCDNN+CMSY10                        Type 1C           yes yes no      10  0
+SOVBZG+CMR10                         Type 1C           yes yes no      11  0
+AXPBVQ+CMMI10                        Type 1C           yes yes no      19  0
+```
+
+typeにCID TrueTypと書かれている行でemd yesと書かれたいた.
+これでいいんじゃない? 埋め込まれているかどうかは.
+
+#### ちょっと確認
+
+windowsでフォント埋め込みしたpdfとそうでないpdfで確認をとったがちゃんと表示される.
+adobe readerとかでなくchromeで見ました.
+
+### そのたｺﾏﾝﾄﾞ
+
+```sh
+# フォント埋め込みを止める
+kanji-config-updmap nofont
+# hiraginoフォントを使う(今は埋め込むだけ 2015/11/21
+kanji-config-updmap hiragino
+# 状況確認
+kanji-config-updmap status
+```
